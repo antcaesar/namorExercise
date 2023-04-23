@@ -53,7 +53,8 @@ class database {
      * Función para añadir una búsqueda al historial, y no realizala dos veces.
      * Devuelve true en caso de éxito, y false en caso contrario. 
      */
-    function addSearch($query) {
+    function addSearch($rawquery) {
+        $query = strtolower($rawquery);
         $sql = "INSERT INTO searched (query) VALUES ('$query') ";
         $res = $this->dbconn->query($sql);
         if ($res === TRUE) {
@@ -70,7 +71,8 @@ class database {
      * Parámetros:
      * - $domain : El dominio, sin https:// 
      */
-    function getDomainRelevance($domain) {
+    function getDomainRelevance($rawdomain) {
+        $domain = strtolower($rawdomain);
         $sql = "SELECT * from linksRelevancy where urlDomain = '$domain'";
         $res = $this->dbconn->query($sql);
         if ($res->num_rows>0) {
