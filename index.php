@@ -43,6 +43,20 @@ if (isset($_POST['busqueda'])) {
                     echo $busca->getTabla();
             ?>
             </table> 
+            <p>Variación tras la nueva búsqueda</p>
+            <table>
+                <tr>
+                    <th>Url</th>
+                    <th>Variación</th
+                </tr>
+            <?php
+                    if ($resul != false) {
+                        foreach($resul as $key => $relevance) {
+                            echo "<tr> <td>".$key."</td><td>".$relevance."</td></tr>";
+                        }
+                    }
+            ?>
+            </table>
         </div>
         <div class="derecha">
             <!-- Tabla con las búsquedas realizadas -->

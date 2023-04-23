@@ -77,11 +77,13 @@ class buscador {
                      * Si el dominio ya está como key en el array, le añade uno al valor actual, si no está,
                      *  y es distinto a "", lo pone a uno usando como key del array el dominio.
                      */
-                    if(array_key_exists($domin, $linksInSearch) && $domin != "") {
-                        $linksInSearch[$domin] += 1;
-                    }
-                    else {
-                        $linksInSearch[$domin] = 1;
+                    if ($domin != "" && strpos($domin, ".") !== false) {
+                        if(array_key_exists($domin, $linksInSearch)) {
+                            $linksInSearch[$domin] += 1;
+                        }
+                        else {
+                            $linksInSearch[$domin] = 1;
+                        }
                     }
                 }
             }
