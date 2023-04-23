@@ -38,7 +38,8 @@ class database {
      * Función para verificar si la búsqueda ya ha sido realizada anteriormente, 
      * devuelve true en caso de que ya esté realizada esa búsqueda, y false en caso contrario. 
      */
-    function checkSearched($query) {
+    function checkSearched($rawquery) {
+        $query = strtolower($rawquery);
         $sql = "SELECT * from searched where query = '$query'";
         $res = $this->dbconn->query($sql);
         if ($res->num_rows>0) {
@@ -71,8 +72,7 @@ class database {
      * Parámetros:
      * - $domain : El dominio, sin https:// 
      */
-    function getDomainRelevance($rawdomain) {
-        $domain = strtolower($rawdomain);
+    function getDomainRelevance($domain) {
         $sql = "SELECT * from linksRelevancy where urlDomain = '$domain'";
         $res = $this->dbconn->query($sql);
         if ($res->num_rows>0) {
