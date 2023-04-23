@@ -13,7 +13,7 @@ class buscador {
      * Contructor
      */
     function __construct() {
-        $this->nav = new navegador("https://www.bing.com");
+        $this->nav = new navegador("https://google.com");
     }
 
     /**
@@ -58,66 +58,32 @@ class buscador {
         // Verificamos que la búsqueda no esté realizada previamente
         $resp = $this->search($rawString);
         if ($resp != false) {
-            //Almacenamos el contenido en un fichero, para análisis en caso de fallo
-            $fichero = "tmp/" . strtotime("now") . ".txt";
-
-            file_put_contents($fichero, $resp);
-
-            $aArray = file($fichero, FILE_IGNORE_NEW_LINES);
-
             // Creamos un array con el contenido de la respuesta, haciendo que cada línea sea un valor del array
             $lineas = explode("\n", $resp);
             //Para almacenar los enlaces y el número de veces que ocurren
             $linksInSearch = array();
-            //Para controlar el flujo dentro del bucle.
-            $resultados = false;
-            $elemento = false;
 
-            foreach($lineas as $linea) {
-                /**
-                 * Verificamos las líneas hasta que aparece el marcardor de que después vendrán los resultados.
-                 * si aparece, permitimos que se busque si hay elementos de resultados en esa línea
-                 */
-                if (strpos($linea, '<ol id="b_results"')  !== false) {
-                    $resultados = true;
-                }  
-                //Para que no busque más allá de donde no hay más datos.
-                if (strpos($linea, '</ol>')  !== false) {
-                    $resultados = false;
-                }  
-                /**
-                 * Si encontramos un elemento de resultado de la búsqueda, sabremos que las siguientes líneas
-                 * hasta que se cierre el elemento, serán los datos del resultado.
-                 */
-                if (($resultados == true) && (strpos($linea, '<li class="b_algo"') !== false)) {
-                    $elemento = true;
-                }
-                //Para saber cuándo termina el elemento
-                if (($elemento == true) && (strpos($linea, '</li>') !== false)) {
-                    $elemento = false;
-                }
-                //Si estamos buscando un elemento, y aparace una línea de enlace, será la url que buscamos
-                if (($elemento == true) && (strpos($linea, '<a href=')!== false)) {
-                    $elem = explode(" ", $linea);
+            foreach ($lineas as $numLinea => $linea) {
+                //Busca la línea en la que está el resultado
+                if ((strpos($linea, '<a class=') !== false) && strpos($lineas[$numLinea+1], '<span class=') !== false) {
+                    //Extrae la url del resultado. 
+                    if (strpos($linea, "url?q=https://") !== false) {
+                        $domin = extractUrl('url?q=https://','/', $linea);
+                    } 
+                    else {
+                        $domin = extractUrl('url?q=http://','/', $linea);
+                    }
                     /**
-                     * Separamos los elementos de la línea, nos quedamos con el que contiene el href
-                     * y eliminamos el href= y las comillas dobles, después nos quedamos sólo con la parte 
-                     * del enlace que corresponde al dominio
+                     * Si el dominio ya está como key en el array, le añade uno al valor actual, si no está,
+                     *  y es distinto a "", lo pone a uno usando como key del array el dominio.
                      */
-                    $hLink = str_replace(array('href=', '"'), array("", ""), $elem[1]);
-                    $domin = extractUrl("//", "/", $hLink);
-                    /**
-                     * Si el dominio ya está como clave del array, añadimos uno al valor que tenga, si no está, 
-                     * lo añadimos como clave, y le damos valor 1.
-                     */
-                    if(array_key_exists($domin, $linksInSearch)) {
+                    if(array_key_exists($domin, $linksInSearch) && $domin != "") {
                         $linksInSearch[$domin] += 1;
                     }
                     else {
                         $linksInSearch[$domin] = 1;
                     }
                 }
-                
             }
 
             $db = new database();

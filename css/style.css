@@ -39,3 +39,18 @@ input[type=text] {
     border-radius: 10px;
     font-size: large;
 }
+
+input[type=submit] {
+    padding: 5px 15px;
+    background: #0060df;
+    border: 0 none;
+    cursor: pointer;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    font-size: large;
+    color: white;
+}
+
+.nota {
+    font-size: large;
+}

@@ -12,10 +12,10 @@ function extractUrl($strIni, $strFin, $line) {
     if ($first !== false) {
         if ($strFin !== '') {
             //Se le añade dos en este caso para que se salte el // 
-            $last   = strpos($line, $strFin, $first+2);
+            $last   = strpos($line, $strFin, $first+strlen($strIni));
             if($last !== false) {
                 $strLen = $last - $first;
-                $result = substr($line, $first+2, $strLen-2);
+                $result = substr($line, $first+strlen($strIni), $strLen-strlen($strIni));
                 //$result = substr($result, strpos($result, ".")+1);
                 return $result;
             }

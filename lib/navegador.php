@@ -28,26 +28,14 @@ class navegador {
      * Función para realizar un curl que permita obtner los datos de la web del buscador.
      */
     function navega($url) {
-        //Para gestionar las cookies
-        $cookieFile = "cookies.txt";
-        if(!file_exists($cookieFile)) {
-            $fh = fopen($cookieFile, "w");
-            fwrite($fh, "");
-            fclose($fh);
-        }
     
     
         // Para los distintos datos de la cabecera de la conexión
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url . $url);
-        curl_setopt($ch, CURLOPT_POST, FALSE);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookieFile);
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookieFile); 
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)");
 
         //Ejecutamos el curl
         if(!curl_exec($ch)){

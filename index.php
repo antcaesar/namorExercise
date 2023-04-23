@@ -29,7 +29,7 @@ if (isset($_POST['busqueda'])) {
     <form action="" method="post">
         <p>Búsqueda: </br><input type="text" name="busqueda" /></p>
         <p><input type="submit"/></p>
-        <p>Nota: no se tendrán en cuenta en los cálculos las búsquedas ya realizadas</p>
+        <p class="nota">Nota: no se tendrán en cuenta en los cálculos las búsquedas ya realizadas</p>
     </form>
     <div class="container">
         <div class="izquierda">
